@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>LRU 实现</title>
+    <link href="/2021/01/31/LRU%E5%AE%9E%E7%8E%B0/"/>
+    <url>/2021/01/31/LRU%E5%AE%9E%E7%8E%B0/</url>
+    
+    <content type="html"><![CDATA[<p>思路：</p><p>Python dict + 双向链表</p><p>Python 实现:</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Leetcode 双向链表</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>关于找个上海人</title>
     <link href="/2021/01/24/%E5%85%B3%E4%BA%8E%E6%89%BE%E4%B8%AA%E4%B8%8A%E6%B5%B7%E4%BA%BA/"/>
     <url>/2021/01/24/%E5%85%B3%E4%BA%8E%E6%89%BE%E4%B8%AA%E4%B8%8A%E6%B5%B7%E4%BA%BA/</url>
