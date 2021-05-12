@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>Python thread - Red</title>
+  <title>装饰器 - Red</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Python thread">
+            <span class="h2" id="subtitle" title="装饰器">
               
             </span>
 
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-04-23 11:12" pubdate>
-        April 23, 2021 am
+      <time datetime="2021-05-11 11:39" pubdate>
+        May 11, 2021 am
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      239 字
+      952 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      2
+      13
        分钟
     </span>
   
@@ -224,25 +224,149 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Python thread</h1>
+            <h1 style="display: none">装饰器</h1>
             
             <div class="markdown-body">
-              <h3 id="多核"><a href="#多核" class="headerlink" title="多核"></a>多核</h3><p>对于 Python 而言，因为有 GIL 锁的原因，每次 CPU 只能运行一个线程，所以即使是多核，Python 的多线程也只能用一个，发挥不出多核的优势。</p>
-<h3 id="既然每次CPU只能跑一个线程，那Python多线程的优势在哪？"><a href="#既然每次CPU只能跑一个线程，那Python多线程的优势在哪？" class="headerlink" title="既然每次CPU只能跑一个线程，那Python多线程的优势在哪？"></a>既然每次CPU只能跑一个线程，那Python多线程的优势在哪？</h3><p>优势在于 IO 密集型的线程，可以利用 IO 阻塞等待时的空闲时间去执行另一个线程，Python 在 IO 阻塞的时候会释放 GIL 锁，然后 CPU 就切换到其他线程，等于说是这个线程的 IO 操作和另一个线程的 CPU 计算同时进行的，所以对于 IO 密集型的线程，Python 多线程速度还是快很多的。</p>
-<p>CPU 密集型下，由于一个 CPU 时间片下只能运行一个线程，所以使用多线程并不能加快计算速度。相反可能因为频繁的切换线程，使速度更慢。</p>
+              <h2 id="什么是装饰器"><a href="#什么是装饰器" class="headerlink" title="什么是装饰器"></a>什么是装饰器</h2><p>装饰器是一个能返回函数的高阶函数。它以@符号的形式装饰一个函数，可以给被装饰的函数增强功能。比如可以统计这个函数的执行时间，运行函数的时候打日志等。</p>
+<h2 id="实现一个不带参数的装饰器"><a href="#实现一个不带参数的装饰器" class="headerlink" title="实现一个不带参数的装饰器"></a>实现一个不带参数的装饰器</h2><p>不带参数的装饰器用两层函数来实现，它对于被装饰函数 f 所做的事情是 f = metric(f)</p>
+<pre><code>import time
+from functools import wraps
+def metric(func):
+    @wraps(func)
+    def wrapper(*args, **kw):
+        start = time.perf_counter()
+        res = func(*args, **kw)
+        end = time.perf_counter()
+        cost = (end - start) * 1000
+        print(f&quot;&#123;func.__name__&#125; finished in &#123;cost&#125;ms&quot;)
+        return res
+    return wrapper
+
+@metric
+def slow(x, y):
+    time.sleep(0.1234)
+    return x + y
+
+@metric
+def fast(x, y, z):
+    time.sleep(0.0012)
+    return x * y * z
+
+def test_deco():
+    s = slow(1, 3)
+    f = fast(3, 4, 5)
+    assert s == 4
+    assert f == 60
+
+test_deco()</code></pre>
+<p>这段代码的执行结果是</p>
+<pre><code>slow finished in 138.6591ms
+fast finished in 14.628799999999998ms</code></pre>
+<h2 id="实现一个带参数的装饰器"><a href="#实现一个带参数的装饰器" class="headerlink" title="实现一个带参数的装饰器"></a>实现一个带参数的装饰器</h2><p>带参数的装饰器用三层函数来实现。它对于被装饰函数 f 所做的事情是 f = log(‘INFO’)(f)</p>
+<pre><code>def log(level):
+    def decorator(func):
+        def wrapper(*args, **kw):
+            print(f&#39;&#123;level&#125; begin call&#39;)
+            func(*args, **kw)
+            print(f&#39;&#123;level&#125; end call&#39;)
+        return wrapper
+    return decorator
+
+@log(&#39;INFO&#39;)
+def f():
+    pass
+
+f()</code></pre>
+<p>这段代码的执行结果是</p>
+<pre><code>INFO begin call
+INFO end call</code></pre>
+<h2 id="装饰器的执行过程"><a href="#装饰器的执行过程" class="headerlink" title="装饰器的执行过程"></a>装饰器的执行过程</h2><p>拿上面的带参数的装饰器来举例子，首先调用 log(‘INFO’),返回 decoorator, 然后调用 decorator函数，传入参数 func，返回 wrapper函数，再调用wrapper函数，在wrapper 函数里调用被装饰的函数。<br>因此 log 的返回值需要是 decorator, 才能继续调用 decorator，decorator 的返回值需要时 wrapper，才能继续调用 wrapper 函数，至于 wrapper 函数的返回值，我觉得不是必要有返回值，依据下面是如何调用被装饰的函数 f 的，如果要用 f 的返回值，那么就 res = func(*args, **kw), wrapper 函数返回 res, 如果用不到，wrapper函数可以不返回（当然不返回也有默认返回值是 None）。</p>
+<p>以一段代码来看下：</p>
+<pre><code>def log(level):
+    def decorator(func):
+        def wrapper(*args, **kw):
+            print(&#39;3&#39;)
+            print(f&#39;&#123;level&#125; begin call&#39;)
+            func(*args, **kw)
+            print(&#39;5&#39;)
+            print(f&#39;&#123;level&#125; end call&#39;)
+        print(&#39;2&#39;)
+        return wrapper
+    print(&#39;1&#39;)
+    return decorator
+
+@log(&#39;INFO&#39;)
+def f():
+    print(&#39;4&#39;)
+    pass
+
+f()</code></pre>
+<p>执行结果为：</p>
+<pre><code>1
+2
+3
+INFO begin call
+4
+5
+INFO end call</code></pre>
+<h2 id="functools-wraps"><a href="#functools-wraps" class="headerlink" title="functools.wraps"></a>functools.wraps</h2><p>不管是两层还是三层，都有一个问题，就是被装饰的函数的名字会变成 wrapper, 看下面这段代码，最后打印被装饰的函数 f 的名字由 f 变成了 wrapper, 原因待写……</p>
+<pre><code>def metric(func):
+    def wrapper(*args, **kw):
+        start = time.perf_counter()
+        func(*args, **kw)
+        end = time.perf_counter()
+        cost = (end - start) * 1000
+        print(f&quot;&#123;func.__name__&#125; finished in &#123;cost&#125;ms&quot;)
+    return wrapper
+
+@metric
+def f():
+    pass
+
+f()
+print(f.__name__)   #  it will print wrapper</code></pre>
+<p>可以用内置函数工具 functools.wraps 来解决这个问题，functools.wraps 也是一个装饰器，它的作用是使被装饰的函数保留其原有的函数信息。它本质上做的事情是 wrapper.__name__ = func.__name__</p>
+<h4 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h4><p>博客学习自廖雪峰的网站，是自己的记录总结。<br>This is <a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017451662295584#0">廖雪峰的官方网站</a>。</p>
+<h2 id="课后作业"><a href="#课后作业" class="headerlink" title="课后作业"></a>课后作业</h2><p>能否写出一个 @log 的装饰器，使它同时支持下面两种装饰</p>
+<pre><code>@log
+def f():
+    pass
+
+@log(&#39;execute&#39;)
+def f():
+    pass</code></pre>
+<p>answer:<br>    注意上面是不带参数的装饰器，是 @log, 不等于 @log()</p>
+<pre><code>def log(text):
+    def decorator(func):
+        def wrapper(*args, **kw):
+            if callable(text):
+                print(f&#39;begin call &#123;func.__name__&#125;&#39;)
+            else:
+                print(f&#39;&#123;text&#125; begin call &#123;func.__name__&#125;&#39;)
+            print(&#39;end call&#39;)
+        return wrapper
+    if callable(text):
+        return decorator(text)
+    return decorator
+
+@log
+def f():
+    pass
+
+@log(&#39;execute&#39;)
+def f1():
+    pass</code></pre>
+<p>执行结果为：</p>
+<pre><code>begin call f
+end call
+execute begin call f1
+end call</code></pre>
 
             </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
                 
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/thread/">thread</a>
-                    
-                  </div>
                 
               </div>
               
@@ -253,18 +377,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/04/25/NEED-TO-LEARN/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">NEED TO LEARN</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/02/01/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
-                        <span class="hidden-mobile">动态规划</span>
+                      <a href="/2021/04/25/NEED-TO-LEARN/">
+                        <span class="hidden-mobile">NEED TO LEARN</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

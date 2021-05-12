@@ -4,6 +4,32 @@
   
   
   <entry>
+    <title>装饰器</title>
+    <link href="/2021/05/11/%E8%A3%85%E9%A5%B0%E5%99%A8/"/>
+    <url>/2021/05/11/%E8%A3%85%E9%A5%B0%E5%99%A8/</url>
+    
+    <content type="html"><![CDATA[<h2 id="什么是装饰器"><a href="#什么是装饰器" class="headerlink" title="什么是装饰器"></a>什么是装饰器</h2><p>装饰器是一个能返回函数的高阶函数。它以@符号的形式装饰一个函数，可以给被装饰的函数增强功能。比如可以统计这个函数的执行时间，运行函数的时候打日志等。</p><h2 id="实现一个不带参数的装饰器"><a href="#实现一个不带参数的装饰器" class="headerlink" title="实现一个不带参数的装饰器"></a>实现一个不带参数的装饰器</h2><p>不带参数的装饰器用两层函数来实现，它对于被装饰函数 f 所做的事情是 f = metric(f)</p><pre><code>import timefrom functools import wrapsdef metric(func):    @wraps(func)    def wrapper(*args, **kw):        start = time.perf_counter()        res = func(*args, **kw)        end = time.perf_counter()        cost = (end - start) * 1000        print(f&quot;&#123;func.__name__&#125; finished in &#123;cost&#125;ms&quot;)        return res    return wrapper@metricdef slow(x, y):    time.sleep(0.1234)    return x + y@metricdef fast(x, y, z):    time.sleep(0.0012)    return x * y * zdef test_deco():    s = slow(1, 3)    f = fast(3, 4, 5)    assert s == 4    assert f == 60test_deco()</code></pre><p>这段代码的执行结果是</p><pre><code>slow finished in 138.6591msfast finished in 14.628799999999998ms</code></pre><h2 id="实现一个带参数的装饰器"><a href="#实现一个带参数的装饰器" class="headerlink" title="实现一个带参数的装饰器"></a>实现一个带参数的装饰器</h2><p>带参数的装饰器用三层函数来实现。它对于被装饰函数 f 所做的事情是 f = log(‘INFO’)(f)</p><pre><code>def log(level):    def decorator(func):        def wrapper(*args, **kw):            print(f&#39;&#123;level&#125; begin call&#39;)            func(*args, **kw)            print(f&#39;&#123;level&#125; end call&#39;)        return wrapper    return decorator@log(&#39;INFO&#39;)def f():    passf()</code></pre><p>这段代码的执行结果是</p><pre><code>INFO begin callINFO end call</code></pre><h2 id="装饰器的执行过程"><a href="#装饰器的执行过程" class="headerlink" title="装饰器的执行过程"></a>装饰器的执行过程</h2><p>拿上面的带参数的装饰器来举例子，首先调用 log(‘INFO’),返回 decoorator, 然后调用 decorator函数，传入参数 func，返回 wrapper函数，再调用wrapper函数，在wrapper 函数里调用被装饰的函数。<br>因此 log 的返回值需要是 decorator, 才能继续调用 decorator，decorator 的返回值需要时 wrapper，才能继续调用 wrapper 函数，至于 wrapper 函数的返回值，我觉得不是必要有返回值，依据下面是如何调用被装饰的函数 f 的，如果要用 f 的返回值，那么就 res = func(*args, **kw), wrapper 函数返回 res, 如果用不到，wrapper函数可以不返回（当然不返回也有默认返回值是 None）。</p><p>以一段代码来看下：</p><pre><code>def log(level):    def decorator(func):        def wrapper(*args, **kw):            print(&#39;3&#39;)            print(f&#39;&#123;level&#125; begin call&#39;)            func(*args, **kw)            print(&#39;5&#39;)            print(f&#39;&#123;level&#125; end call&#39;)        print(&#39;2&#39;)        return wrapper    print(&#39;1&#39;)    return decorator@log(&#39;INFO&#39;)def f():    print(&#39;4&#39;)    passf()</code></pre><p>执行结果为：</p><pre><code>123INFO begin call45INFO end call</code></pre><h2 id="functools-wraps"><a href="#functools-wraps" class="headerlink" title="functools.wraps"></a>functools.wraps</h2><p>不管是两层还是三层，都有一个问题，就是被装饰的函数的名字会变成 wrapper, 看下面这段代码，最后打印被装饰的函数 f 的名字由 f 变成了 wrapper, 原因待写……</p><pre><code>def metric(func):    def wrapper(*args, **kw):        start = time.perf_counter()        func(*args, **kw)        end = time.perf_counter()        cost = (end - start) * 1000        print(f&quot;&#123;func.__name__&#125; finished in &#123;cost&#125;ms&quot;)    return wrapper@metricdef f():    passf()print(f.__name__)   #  it will print wrapper</code></pre><p>可以用内置函数工具 functools.wraps 来解决这个问题，functools.wraps 也是一个装饰器，它的作用是使被装饰的函数保留其原有的函数信息。它本质上做的事情是 wrapper.__name__ = func.__name__</p><h4 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h4><p>博客学习自廖雪峰的网站，是自己的记录总结。<br>This is <a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017451662295584#0">廖雪峰的官方网站</a>。</p><h2 id="课后作业"><a href="#课后作业" class="headerlink" title="课后作业"></a>课后作业</h2><p>能否写出一个 @log 的装饰器，使它同时支持下面两种装饰</p><pre><code>@logdef f():    pass@log(&#39;execute&#39;)def f():    pass</code></pre><p>answer:<br>    注意上面是不带参数的装饰器，是 @log, 不等于 @log()</p><pre><code>def log(text):    def decorator(func):        def wrapper(*args, **kw):            if callable(text):                print(f&#39;begin call &#123;func.__name__&#125;&#39;)            else:                print(f&#39;&#123;text&#125; begin call &#123;func.__name__&#125;&#39;)            print(&#39;end call&#39;)        return wrapper    if callable(text):        return decorator(text)    return decorator@logdef f():    pass@log(&#39;execute&#39;)def f1():    pass</code></pre><p>执行结果为：</p><pre><code>begin call fend callexecute begin call f1end call</code></pre>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>NEED TO LEARN</title>
+    <link href="/2021/04/25/NEED-TO-LEARN/"/>
+    <url>/2021/04/25/NEED-TO-LEARN/</url>
+    
+    <content type="html"><![CDATA[<p>MySQL：数据存储结构、索引、锁、事务、MVCC、性能优化、高可用方案。MySQL 的确非常复杂，可以问的地方非常多。比如索引，哪些情况下索引失效，联合索引怎么用，什么原理一定要清楚。但凡有多种模式可以选择，一定要想想优劣对比。比如 InnoDB 引擎和 Myisam 引擎的区别，binlog 中有 Row 格式和 Statement 格式，二者有什么区别，为什么这么设计。<br>Redis：Redis 问的是真的多，首先他应用广很多企业都用 Redis，其次它代表了计算机领域一个大的基础问题：缓存，可以考你的点很多。Redis 的数据结构、底层结构、持久化方式这些是基础，然后很可能会结合实际情况，问你怎么用 Redis 的，用到了哪些数据结构，为什么这么选。然后的话是缓存同步的方式。这里我整理了一篇常见的缓存处理方式总结：缓存系统常见问题总结<br>框架：Spring 反而考的不多，可能是满大街都是了。问我的基本就是循环依赖、生命周期、AOP 原理，还有像 ApplicationContext BeanFactory 区别这种问题。然后 Mybatis 可能会问下一级缓存二级缓存。<br>消息队列：消息队列也是非常常用的组件，面试中也问的比较多。主要包括消息丢失、重复投递、保证有序这三种问题，要清楚实现原理。然后要了解消息队列本身的架构、高可用部署方式。<br>网络相关：HTTP、TCP/IP、七层网络模型等等基础知识点。然后 Netty 和 NIO，搞清楚 select poll epoll 的区别和联系。</p><p>容器相关：Docker 和 K8s，一般问点皮毛和应用，毕竟也不是做这个方向的。<br>前端：可能会问些 http 协议、跨域等等跟前后端都相关的问题，毕竟后端岗位，不太会问纯前端的问题。<br>微服务：Spring Cloud、Dubbo、Service Mesh。由于我做微服务很少，所以面试中也遇到的不多，最多就是问到 Hystrix 的熔断和其原理，还有调用链路的问题定位、监控等等。<br>Linux：基本就是看看你是不是实际用过 Linux，常见的 top、free、iostat、nload 等查看服务器各种状态的命令，然后就是遇到两家问我文本处理的脚本，像“输出 access.log 中频次最高的 100 个 IP 地址，去重排序后输出”，虽然做了准备但是平时很少有，现场没写出来…<br>分布式系统相关：几种分布式锁和要注意的问题，分布式一致性协议 Paxos、Raft 和 ZAB、Zookepper 的数据结构等等。然后就是分布式事务，2PC、3PC、TCC</p><h3 id="MySQL-选错索引"><a href="#MySQL-选错索引" class="headerlink" title="MySQL 选错索引"></a>MySQL 选错索引</h3><p>索引信息统计错误： 通过analyze table 表名; 来重新统计<br>其他原因：force index ()</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Python thread</title>
     <link href="/2021/04/23/Python-thread/"/>
     <url>/2021/04/23/Python-thread/</url>

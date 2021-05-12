@@ -17,9 +17,25 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>Archives - Red</title>
+  <title>NEED TO LEARN - Red</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -47,7 +63,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -146,9 +162,46 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Archive">
+            <span class="h2" id="subtitle" title="NEED TO LEARN">
               
             </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-04-25 13:31" pubdate>
+        April 25, 2021 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      744 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      8
+       分钟
+    </span>
+  
+
+  
+  
+</div>
 
             
           </div>
@@ -161,64 +214,79 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">5 posts in total.</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2021</p>
-    
-    <a href="/2021/05/11/%E8%A3%85%E9%A5%B0%E5%99%A8/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">装饰器</span>
-      <time style="float: right;">05-11</time>
-    </a>
-  
-    
-    <a href="/2021/04/25/NEED-TO-LEARN/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">NEED TO LEARN</span>
-      <time style="float: right;">04-25</time>
-    </a>
-  
-    
-    <a href="/2021/04/23/Python-thread/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Python thread</span>
-      <time style="float: right;">04-23</time>
-    </a>
-  
-    
-    <a href="/2021/02/01/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">动态规划</span>
-      <time style="float: right;">02-01</time>
-    </a>
-  
-    
-    <a href="/2021/01/31/LRU%E5%AE%9E%E7%8E%B0/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">LRU 实现</span>
-      <time style="float: right;">01-31</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">NEED TO LEARN</h1>
+            
+            <div class="markdown-body">
+              <p>MySQL：数据存储结构、索引、锁、事务、MVCC、性能优化、高可用方案。MySQL 的确非常复杂，可以问的地方非常多。比如索引，哪些情况下索引失效，联合索引怎么用，什么原理一定要清楚。但凡有多种模式可以选择，一定要想想优劣对比。比如 InnoDB 引擎和 Myisam 引擎的区别，binlog 中有 Row 格式和 Statement 格式，二者有什么区别，为什么这么设计。<br>Redis：Redis 问的是真的多，首先他应用广很多企业都用 Redis，其次它代表了计算机领域一个大的基础问题：缓存，可以考你的点很多。Redis 的数据结构、底层结构、持久化方式这些是基础，然后很可能会结合实际情况，问你怎么用 Redis 的，用到了哪些数据结构，为什么这么选。然后的话是缓存同步的方式。这里我整理了一篇常见的缓存处理方式总结：缓存系统常见问题总结<br>框架：Spring 反而考的不多，可能是满大街都是了。问我的基本就是循环依赖、生命周期、AOP 原理，还有像 ApplicationContext BeanFactory 区别这种问题。然后 Mybatis 可能会问下一级缓存二级缓存。<br>消息队列：消息队列也是非常常用的组件，面试中也问的比较多。主要包括消息丢失、重复投递、保证有序这三种问题，要清楚实现原理。然后要了解消息队列本身的架构、高可用部署方式。<br>网络相关：HTTP、TCP/IP、七层网络模型等等基础知识点。然后 Netty 和 NIO，搞清楚 select poll epoll 的区别和联系。</p>
+<p>容器相关：Docker 和 K8s，一般问点皮毛和应用，毕竟也不是做这个方向的。<br>前端：可能会问些 http 协议、跨域等等跟前后端都相关的问题，毕竟后端岗位，不太会问纯前端的问题。<br>微服务：Spring Cloud、Dubbo、Service Mesh。由于我做微服务很少，所以面试中也遇到的不多，最多就是问到 Hystrix 的熔断和其原理，还有调用链路的问题定位、监控等等。<br>Linux：基本就是看看你是不是实际用过 Linux，常见的 top、free、iostat、nload 等查看服务器各种状态的命令，然后就是遇到两家问我文本处理的脚本，像“输出 access.log 中频次最高的 100 个 IP 地址，去重排序后输出”，虽然做了准备但是平时很少有，现场没写出来…<br>分布式系统相关：几种分布式锁和要注意的问题，分布式一致性协议 Paxos、Raft 和 ZAB、Zookepper 的数据结构等等。然后就是分布式事务，2PC、3PC、TCC</p>
+<h3 id="MySQL-选错索引"><a href="#MySQL-选错索引" class="headerlink" title="MySQL 选错索引"></a>MySQL 选错索引</h3><p>索引信息统计错误： 通过analyze table 表名; 来重新统计<br>其他原因：force index ()</p>
 
-
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/05/11/%E8%A3%85%E9%A5%B0%E5%99%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">装饰器</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/23/Python-thread/">
+                        <span class="hidden-mobile">Python thread</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -298,9 +366,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
