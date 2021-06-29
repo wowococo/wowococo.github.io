@@ -4,6 +4,51 @@
   
   
   <entry>
+    <title>iota</title>
+    <link href="/2021/06/28/iota/"/>
+    <url>/2021/06/28/iota/</url>
+    
+    <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>iota，英文发音是 [aɪˈoʊtə]，代表希腊字母表的第九个字母。它在Go里代表一个特殊常量，用在常量块中，可以看做它是常量块的行索引。比如说，</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">const</span> (<br>        a = <span class="hljs-literal">iota</span>     <span class="hljs-comment">// 0</span><br>        b            <span class="hljs-comment">// 1</span><br>        c            <span class="hljs-comment">// 2</span><br>        d = <span class="hljs-string">&quot;haha&quot;</span>   <span class="hljs-comment">// &quot;haha&quot;, iota = 3 </span><br>        e            <span class="hljs-comment">// &quot;haha&quot;, iota = 4</span><br>        f            <span class="hljs-comment">// &quot;haha&quot;, iota = 5</span><br>        g = <span class="hljs-number">10000</span>    <span class="hljs-comment">// 10000   iota = 6</span><br>        h            <span class="hljs-comment">// 10000   iota = 7</span><br>        i = <span class="hljs-literal">iota</span>     <span class="hljs-comment">// 8, 恢复计数</span><br>        j            <span class="hljs-comment">// 9</span><br>        k            <span class="hljs-comment">// 10</span><br>)<br></code></pre></td></tr></table></figure><p>再看一个例子, 当没有给一个常量分配值时，它默认和它上一个保持一致。如果是表达式，保持一致指的是同样的表达式，但是同样的表达式对应的实际值是不一定相等的。即c 是3&lt;&lt;iota,  此时iota的值是2，d是3&lt;&lt;iota, 此时iota的值是3。</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">const</span> (<br>    a = <span class="hljs-number">1</span>&lt;&lt;<span class="hljs-literal">iota</span>  <span class="hljs-comment">// 1  1左移0位，1*2^0=1  iota = 0</span><br>    b = <span class="hljs-number">3</span>&lt;&lt;<span class="hljs-literal">iota</span>  <span class="hljs-comment">// 6  3左移1位，3*2^1=6  iota = 1</span><br>    c            <span class="hljs-comment">// 12 3左移2位，3*2^2=12 iota = 2</span><br>    d            <span class="hljs-comment">// 24 3左移3位，3*2^3=24 iota = 3</span><br>)<br></code></pre></td></tr></table></figure><p>注：&lt;&lt;n = *(2^n)</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Go</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/2021/06/24/%E8%AF%84%E5%AE%A1/"/>
+    <url>/2021/06/24/%E8%AF%84%E5%AE%A1/</url>
+    
+    <content type="html"><![CDATA[<p>解析规则开发指南这份文档面向的用户主要是是一、二线技术人员，编写这份指南的目的是对他们赋能，由于解析规则上手有一定难度， 而且解析规则中一些解析方法如果写的不好，比如说正则写的不好，很容易造成解析超时，所以本篇文档主要集中在解析方法的配置指导以及注意事项、正则表达式指导和一份最佳实践来完整的过一遍解析规则的编写过程。</p><p>本篇文档分为六个章节，<strong>第一章</strong>简略的描述下背景和文档主要内容（停顿下看文档）</p><hr><p><strong>第二章</strong>技术原理是写AR解析用到的开源组件和整个解析逻辑架构，这张图可以让前线人员从更加宏观的角度来看他们编写的解析规则是如何在系统中被使用的。</p><hr><p><strong>第三章</strong>是细化到每个解析方法如何配置和使用的注意事项，概述里讲到系统里针对原始日志和已解析字段可以使用的所有解析方法。</p><p>接下来解析方法里首先是前置条件，因为前置条件存在于每个解析方法里，所以把它放在解析方法的最开始。这里主要讲了前置条件是什么、它的组成、注意事项或者说使用建议（这种我都会用红字标识）、书写格式及示例、使用示例。</p><p>下面基本每个解析方法基本都是这样的写法，有一些简单的，没写这么全，这里如果一个一个的讲的话，有点占时间，我就滑着，大家看下，有疑问的地方喊住我就停。</p><hr><p>然后第四章这个最佳实践，是以对anyshare访问日志的解析为例子，之所以选择它，是因为这个解析规则相较于其他而言，它包含的解析方法种类相对较多，那么对于文档用户而言，能够了解到更多的不同解析方法之间的承上启下的关系。</p><p>第一步是新建一个端口接收数据，</p><p>第二步是编写解析规则，先进入到这个解析规则管理界面，然后输入名称、过滤条件、日志，接下来编写解析规则，这里有写编写解析规则的思路，下面都是编写过程中的每个步骤，使用哪个解析方法，解析出什么结果，最后是效果验证，上传日志，然后去搜索页面查看日志。</p><hr><p>第五章写的是正则表达式。首先推荐好的工具，然后是基础知识正则的元字符，这里将元字符分成五类，可以方便记忆。</p><p>以及如何写正则的思路，这些思路都有例子说明，方便读者理解。</p><p>下面这些都是一些常见字段的匹配，这些例子在写正则的过程中，都有给出如何写的思路及过程。</p><p>最后是以理论和例子来讲了正则的优化原则。</p><hr><p>最后是术语说明。</p><p>advice</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>NoSQL</title>
+    <link href="/2021/06/09/NoSQL/"/>
+    <url>/2021/06/09/NoSQL/</url>
+    
+    <content type="html"><![CDATA[<h2 id="NoSQL是什么"><a href="#NoSQL是什么" class="headerlink" title="NoSQL是什么"></a>NoSQL是什么</h2><p>NoSQL是 Not only SQL</p><h2 id="3v和-3-高"><a href="#3v和-3-高" class="headerlink" title="3v和 3 高"></a>3v和 3 高</h2><p>海量、多样、实时</p><p>高可用、高可扩、高并发</p><h2 id="为什么需要NoSQL"><a href="#为什么需要NoSQL" class="headerlink" title="为什么需要NoSQL"></a>为什么需要NoSQL</h2><p>随着web2.0时代的到来，传统关系型数据库已不能满足大数据时代的3v和3高，</p><h2 id="关系型数据库和NoSQL的区别"><a href="#关系型数据库和NoSQL的区别" class="headerlink" title="关系型数据库和NoSQL的区别"></a>关系型数据库和NoSQL的区别</h2><table><thead><tr><th>RDBMS</th><th>NOSQL</th></tr></thead><tbody><tr><td></td><td>解耦合</td></tr><tr><td></td><td>存储类型不限，可存社交网络、流媒体</td></tr><tr><td>设计一个好的表需要天赋</td><td>不需要预先设计好表</td></tr></tbody></table>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>进程间的通信方式</title>
     <link href="/2021/05/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/"/>
     <url>/2021/05/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/</url>
@@ -15,6 +60,25 @@
     <tags>
       
       <tag>进程 操作系统</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>微服务与RPC</title>
+    <link href="/2021/05/14/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8ERPC/"/>
+    <url>/2021/05/14/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8ERPC/</url>
+    
+    <content type="html"><![CDATA[<h2 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h2><p>微服务是为了解决单体应用下服务之间耦合度高、不容易扩展的问题，而提出的一个概念，微服务是一些协同工作小而自治的服务。<br>微服务下，各个服务</p><h2 id="RPC-是什么"><a href="#RPC-是什么" class="headerlink" title="RPC 是什么"></a>RPC 是什么</h2><p>RPC 全称是 Remote Procedure Call, 即远程过程调用，是为了解决分布式系统下不同服务间调用的问题。RPC 的本质是动态代理 + socket 通信。一般情况下，不同服务间的通信可以通过 HTTP 请求接口的方式，这种方式简单，但是在服务间相互调用比较多、接口很多的情况下，http + restful 的方式需要写一串发起http请求的代码，那么就需要</p><h2 id="RPC为什么可以提升服务间的调用效率"><a href="#RPC为什么可以提升服务间的调用效率" class="headerlink" title="RPC为什么可以提升服务间的调用效率"></a>RPC为什么可以提升服务间的调用效率</h2><p>比如说数据的序列化方式protobuf是二进制的，相比文本类型的json和xml来说，压缩后体积更小，传输速率更快。</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>RPC 微服务</tag>
       
     </tags>
     

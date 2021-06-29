@@ -17,9 +17,25 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>Tags - Red</title>
+  <title>Red</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -47,7 +63,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -146,17 +162,50 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Tag">
+            <span class="h2" id="subtitle" title="">
               
             </span>
 
             
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-06-24 11:44" pubdate>
+        June 24, 2021 am
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      826 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      8
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
           </div>
 
-          
-            <div class="scroll-down-bar">
-              <i class="iconfont icon-arrowdown"></i>
-            </div>
           
         </div>
       </div>
@@ -165,24 +214,96 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
+      
 
-<div class="text-center tagcloud">
-  <a href="/tags/Go/" style="font-size: 15px; color: #bbe">Go</a> <a href="/tags/LeetCode/" style="font-size: 15px; color: #bbe">LeetCode</a> <a href="/tags/Leetcode-%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/" style="font-size: 15px; color: #bbe">Leetcode 双向链表</a> <a href="/tags/RPC-%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 15px; color: #bbe">RPC 微服务</a> <a href="/tags/thread/" style="font-size: 15px; color: #bbe">thread</a> <a href="/tags/%E8%BF%9B%E7%A8%8B-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 15px; color: #bbe">进程 操作系统</a>
-</div>
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+            <div class="markdown-body">
+              <p>解析规则开发指南这份文档面向的用户主要是是一、二线技术人员，编写这份指南的目的是对他们赋能，由于解析规则上手有一定难度， 而且解析规则中一些解析方法如果写的不好，比如说正则写的不好，很容易造成解析超时，所以本篇文档主要集中在解析方法的配置指导以及注意事项、正则表达式指导和一份最佳实践来完整的过一遍解析规则的编写过程。</p>
+<p>本篇文档分为六个章节，<strong>第一章</strong>简略的描述下背景和文档主要内容（停顿下看文档）</p>
+<hr>
+<p><strong>第二章</strong>技术原理是写AR解析用到的开源组件和整个解析逻辑架构，这张图可以让前线人员从更加宏观的角度来看他们编写的解析规则是如何在系统中被使用的。</p>
+<hr>
+<p><strong>第三章</strong>是细化到每个解析方法如何配置和使用的注意事项，概述里讲到系统里针对原始日志和已解析字段可以使用的所有解析方法。</p>
+<p>接下来解析方法里首先是前置条件，因为前置条件存在于每个解析方法里，所以把它放在解析方法的最开始。这里主要讲了前置条件是什么、它的组成、注意事项或者说使用建议（这种我都会用红字标识）、书写格式及示例、使用示例。</p>
+<p>下面基本每个解析方法基本都是这样的写法，有一些简单的，没写这么全，这里如果一个一个的讲的话，有点占时间，我就滑着，大家看下，有疑问的地方喊住我就停。</p>
+<hr>
+<p>然后第四章这个最佳实践，是以对anyshare访问日志的解析为例子，之所以选择它，是因为这个解析规则相较于其他而言，它包含的解析方法种类相对较多，那么对于文档用户而言，能够了解到更多的不同解析方法之间的承上启下的关系。</p>
+<p>第一步是新建一个端口接收数据，</p>
+<p>第二步是编写解析规则，先进入到这个解析规则管理界面，然后输入名称、过滤条件、日志，接下来编写解析规则，这里有写编写解析规则的思路，下面都是编写过程中的每个步骤，使用哪个解析方法，解析出什么结果，最后是效果验证，上传日志，然后去搜索页面查看日志。</p>
+<hr>
+<p>第五章写的是正则表达式。首先推荐好的工具，然后是基础知识正则的元字符，这里将元字符分成五类，可以方便记忆。</p>
+<p>以及如何写正则的思路，这些思路都有例子说明，方便读者理解。</p>
+<p>下面这些都是一些常见字段的匹配，这些例子在写正则的过程中，都有给出如何写的思路及过程。</p>
+<p>最后是以理论和例子来讲了正则的优化原则。</p>
+<hr>
+<p>最后是术语说明。</p>
+<p>advice</p>
 
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/06/28/iota/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">iota</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/06/09/NoSQL/">
+                        <span class="hidden-mobile">NoSQL</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -262,9 +383,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
